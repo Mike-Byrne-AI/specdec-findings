@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64" role="img" aria-label="A point with its interval, the mark of the charts on these pages">
+  <style>
+    .bg { fill: #e0cfac; }
+    .edge { fill: none; stroke: #8a6a1f; stroke-width: 1.5; }
+    .mark { stroke: #2a1f17; fill: #2a1f17; }
+    @media (prefers-color-scheme: dark) {
+      .bg { fill: #1a1511; }
+      .edge { stroke: #d9b35a; }
+      .mark { stroke: #ecdcbd; fill: #ecdcbd; }
+    }
+  </style>
+  <rect class="bg" width="64" height="64"/>
+  <rect class="edge" x="4" y="4" width="56" height="56"/>
+  <rect class="edge" x="8" y="8" width="48" height="48"/>
+  <line class="mark" x1="15" y1="32" x2="49" y2="32" stroke-width="3" stroke-linecap="round"/>
+  <line class="mark" x1="15" y1="25" x2="15" y2="39" stroke-width="3" stroke-linecap="round"/>
+  <line class="mark" x1="49" y1="25" x2="49" y2="39" stroke-width="3" stroke-linecap="round"/>
+  <circle class="mark" cx="32" cy="32" r="7"/>
+</svg>
