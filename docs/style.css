@@ -318,16 +318,47 @@ code { font-family: var(--mono); font-size: .84em; overflow-wrap: anywhere; }
 .withheld .dropped { color: var(--muted); }
 .withheld details.more > .full { max-width: none; display: grid; gap: 10px; }
 
-/* modules */
-.modules { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; margin-top: 18px; }
-.module { background: var(--surface); border: 1px solid var(--line-strong); box-shadow: inset 0 0 0 4px var(--raised), inset 0 0 0 5px var(--line); padding: 18px 22px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; min-width: 0; }
-.module h4 { margin: 4px 0 0; font-size: 1rem; font-weight: 500; color: var(--brass-text); font-variant-caps: small-caps; text-transform: lowercase; letter-spacing: .06em; }
-.module p, .module li { color: var(--ink-2); overflow-wrap: anywhere; }
-.module ul { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; }
-.entrypoints { display: flex; flex-wrap: wrap; gap: 6px; }
-.entrypoints code { border: 1px solid var(--line); padding: 0 6px; }
+/* modules, decision 23 (plan 16.28): one catalogue card and one explanation per module. The card is typed card
+   stock: the folder name as a call number in its left margin, a red rule under the heading, a punched hole at
+   its foot (a mask, so the page shows through; the cell around it carries the shadow). Beside it at desktop
+   width, under it on a phone, the explanation; under both, the files in a closed expander. */
+:root { --card-stock: #f8f2e2; --card-edge: rgba(42,31,23,.24); --card-rule: #b4473a; --card-ink: #2a1f17; --card-ink-2: #45372b; --card-call: #6e2518; --card-shadow: rgba(42,31,23,.3); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --card-stock: #2c241c; --card-edge: rgba(236,220,189,.2); --card-rule: #c0614d; --card-ink: #ecdcbd; --card-ink-2: #cdbb9c; --card-call: #d9b35a; --card-shadow: rgba(0,0,0,.6); }
+}
+:root[data-theme="dark"] { --card-stock: #2c241c; --card-edge: rgba(236,220,189,.2); --card-rule: #c0614d; --card-ink: #ecdcbd; --card-ink-2: #cdbb9c; --card-call: #d9b35a; --card-shadow: rgba(0,0,0,.6); }
+.modules { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0; margin-top: 22px; }
+.module { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; padding-block: 30px; min-width: 0; }
+.module + .module { border-top: 1px solid var(--line-strong); }
+.pair { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px 36px; align-items: start; min-width: 0; }
+.cardcell { filter: drop-shadow(0 1px 1px var(--card-shadow)) drop-shadow(0 6px 10px var(--card-shadow)); min-width: 0; max-width: 34rem; }
+/* two columns: the card stays in view beside its explanation; its sticky box is the pair, so it stops where the
+   explanation ends and never covers the file list under it */
+@media (min-width: 980px) {
+  .pair { grid-template-columns: minmax(0, 31rem) minmax(0, 1fr); }
+  .cardcell { position: sticky; top: 64px; }
+}
+.catcard { background: var(--paper-grain) 0 0 / 320px 320px, var(--card-stock); border: 1px solid var(--card-edge); border-radius: 3px; padding: 16px 20px 44px; font-family: var(--mono); font-size: .94rem; line-height: 1.45; color: var(--card-ink); min-width: 0;
+  -webkit-mask: radial-gradient(circle at 50% calc(100% - 20px), transparent 7px, #000 7.5px); mask: radial-gradient(circle at 50% calc(100% - 20px), transparent 7px, #000 7.5px); }
+.cat-head { display: grid; grid-template-columns: minmax(0, 5.6rem) minmax(0, 1fr); gap: 0 12px; padding-bottom: 10px; border-bottom: 2px solid var(--card-rule); }
+.catcard .callno { color: var(--card-call); overflow-wrap: anywhere; }
+.catcard .callno span { display: block; }
+.catcard h3 { font-family: var(--mono); font-size: 1rem; font-weight: 500; line-height: 1.4; color: var(--card-ink); text-wrap: pretty; }
+.cat-body { padding: 10px 0 0 calc(5.6rem + 12px); display: grid; gap: 7px; }
+.catcard .cat-body p { color: var(--card-ink-2); overflow-wrap: anywhere; }
+.catcard .cat-body .tests { color: var(--card-ink); }
+@media (max-width: 520px) {
+  .cat-head { grid-template-columns: minmax(0, 1fr); gap: 4px; }
+  .catcard .callno span { display: inline; }
+  .cat-body { padding-left: 0; }
+}
+.explain { display: grid; gap: 8px; min-width: 0; }
+.explain .sumlead { font-size: 1.06rem; color: var(--ink); overflow-wrap: anywhere; }
+.module h4 { margin: 6px 0 0; font-size: 1rem; font-weight: 500; color: var(--brass-text); font-variant-caps: small-caps; text-transform: lowercase; letter-spacing: .06em; }
+.explain p, .explain li { color: var(--ink-2); overflow-wrap: anywhere; }
+.explain ul { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; }
+.module details.more > .full { max-width: none; }
 .filetable a { overflow-wrap: anywhere; }
-.module .tests { font-family: var(--mono); font-size: .86rem; color: var(--ink); }
 
 /* check a number: the intro as short items */
 .prov-list { margin: 10px 0 0; padding-left: 1.2em; display: grid; gap: 6px; color: var(--ink-2); }
