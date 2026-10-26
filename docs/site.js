@@ -1,8 +1,8 @@
 /* specdec-findings client script. The page is static markup; this file only does what HTML
-   and CSS cannot: the theme toggle, copying a provenance chip's text on click, the copy
-   buttons of the cite section, the findings filters, the glossary search, opening a finding
-   when a link targets it, and opening every closed expander for a print (a closed details
-   prints nothing of its contents). Without it the page reads in full, with the filters, the
+   and CSS cannot: the theme toggle, the copy buttons of the cite section and the modules, the findings filters, the glossary search, opening a finding
+   when a link targets it, opening every closed expander for a print (a closed details
+   prints nothing of its contents), and letting a module card cell taller than the screen stick
+   by its foot. Without it the page reads in full, with the filters, the
    toggle and the copy buttons hidden. Loaded in <head> so the stored theme applies before
    the first paint. */
 (function () {
@@ -41,7 +41,6 @@
   };
 
   ready(function () {
-    var commit = document.body.getAttribute('data-commit') || '';
     var status = document.getElementById('copy-status');
 
     // theme toggle: auto, light, dark, then auto again
@@ -58,29 +57,7 @@
       });
     }
 
-    // provenance chips: a click (or Enter or Space on the focused button) copies
-    // "path:line sha256:<first twelve hex> @ <commit>"
-    document.addEventListener('click', function (ev) {
-      var b = ev.target && ev.target.closest ? ev.target.closest('button.prov') : null;
-      if (!b) return;
-      var t = b.textContent;
-      var i = t.lastIndexOf(' · ');
-      var s = (i >= 0 ? t.slice(0, i) + ' sha256:' + t.slice(i + 3) : t) + ' @ ' + commit;
-      var done = function () {
-        b.classList.add('copied');
-        if (status) status.textContent = 'Copied ' + s;
-        window.setTimeout(function () { b.classList.remove('copied'); }, 900);
-      };
-      var fallback = function () {
-        var r = document.createRange();
-        r.selectNodeContents(b);
-        var sel = window.getSelection();
-        sel.removeAllRanges();
-        sel.addRange(r);
-        if (status) status.textContent = 'Selected ' + t;
-      };
-      try { navigator.clipboard.writeText(s).then(done, fallback); } catch (e) { fallback(); }
-    });
+    // provenance chips are plain links to their lines at the commit since decision 27 (plan 16.39); no script
 
     // copy buttons (decision 15): copy the text of the block the button names
     var copies = document.querySelectorAll('button.copy');
@@ -167,5 +144,23 @@
     };
     window.addEventListener('hashchange', openHash);
     openHash();
+
+    // decision 25 (plan 16.37): a sticky module card cell taller than the room under the rail sticks by its foot,
+    // so it scrolls with the page until its bottom is 16 px above the viewport's and every line can be read
+    var cells = document.querySelectorAll('.cardcell');
+    if (cells.length) {
+      var fit = function () {
+        for (var i = 0; i < cells.length; i++) {
+          var c = cells[i];
+          c.style.top = '';
+          if (getComputedStyle(c).position !== 'sticky') continue;
+          var room = window.innerHeight - 64;
+          if (c.offsetHeight > room) c.style.top = (window.innerHeight - c.offsetHeight - 16) + 'px';
+        }
+      };
+      fit();
+      window.addEventListener('resize', fit);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+    }
   });
 })();
