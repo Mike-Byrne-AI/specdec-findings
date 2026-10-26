@@ -411,7 +411,7 @@ section > .col > p.intro + p.intro, section > .wide > p.intro + p.intro { margin
    two rows at phone width where the rail wraps) */
 [id] { scroll-margin-top: 58px; }
 @media (max-width: 560px) { [id] { scroll-margin-top: 98px; } }
-footer .allpage { margin-top: 10px; }
+footer .allpage, footer .latest { margin-top: 10px; }
 .quote { border-left: 3px solid var(--line-strong); padding: 6px 14px 6px 16px; margin-top: 14px; max-width: 80ch; min-width: 0; }
 .quote .lead { margin: 0; color: var(--ink); }
 .quote h3 { font-size: 1.15rem; font-weight: 600; margin: 0 0 6px; }
